@@ -1,23 +1,27 @@
 import pyautogui as pg
 import time
-
-def err():
-    print('[err]')
-    pg.alert('Что-то сломалось','Ошибка')
-def start_lol():
-    pg.hotkey("winleft")
-    pg.typewrite("lol")
-    pg.typewrite(["enter"])
+import threading 
 
 need_wait = True
+
+def thread(fn):
+    def execute(*args, **kwargs):
+        threading.Thread(target=fn, args=args, kwargs=kwargs).start()
+    return execute
+
+
+
 def wait_game():
-    for i in range(120):
+    x = 0
+    while True:
         if not need_wait:
             break
-        pg.click(950,788)
-        if i%12==0:
-            print(f'прошло {i//12} минут ')
-        time.sleep(5)
+        if x%5==0:
+            pg.click(950,788)
+        _time = f'Прошло {x//60} минут'
+        print(_time)
+        time.sleep(1)
+        x +=1 
         
 def game_start():
     pg.moveTo(1265,180,2.5)
@@ -30,14 +34,12 @@ def game_start():
     pg.click(890,920,10,1)
     wait_game()
 defList = {
-    None:lambda : print,
-    'err':err,
-    'Запускаем лол':start_lol,
     'Ждем катку': wait_game,
+    'Запускаем катку + ждем катку':game_start
 }
 
 def main():
-    defList.get(pg.confirm('Что делаем?','Что делаем?',('Запускаем лол','Ждем катку')), 'err')()
+    defList.get(pg.confirm('Что делаем?','Что делаем?',('Запускаем катку + ждем катку','Ждем катку')), 'err')()
 
 if __name__ == '__main__':
     wait_game()
