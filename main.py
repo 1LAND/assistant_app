@@ -10,7 +10,7 @@ def thread(fn):
     return execute
 
 
-
+@thread
 def wait_game():
     x = 0
     while True:
@@ -22,7 +22,7 @@ def wait_game():
         print(_time)
         time.sleep(1)
         x +=1 
-        
+@thread        
 def game_start():
     pg.moveTo(1265,180,2.5)
     pg.click(1265,180)
